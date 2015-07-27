@@ -4,4 +4,9 @@ public class Trackingcode {
 	String treansferCode;
 	Range range;
 	boolean invalid;
+	
+	Trackingcode()
+	{
+		invalid = false;
+	}
 }
