@@ -55,11 +55,54 @@ public class TrackingRecords {
 		}
 	}
 	
-	public void insertingIntoRecordList()
+	public void insertingIntoRecordList(Record record)
 	{
+		
 		for(Trackingcode listrecord : recordlist)
 		{
-			
+			Relation relation = listrecord.range.classify(record.range);
+			switch(relation)
+			{
+				case Relation.SAME:
+					listrecord.transferCode = record.transferCode;
+					listrecord.statusCode = record.statusCode;
+					break;
+					
+				case Relation.SUPERSET:
+					
+					Record previousRecord = new Record(listrecord.range.lo, record.range.lo - 1, listrecord.statusCode, listrecord.transferCode);
+					Record nextRecord = new Record(record.range.hi + 1, listrecord.range.hi, listrecord.statusCode, listrecord.transferCode);
+					insertRecord(previousRecord);
+					insertRecord(nextRecord);
+					insertRecord(record);
+					deleteRecord(currentRecord);
+					break;
+							
+				case Relation.LESSDISJOINT:
+					insertRecord(record);
+					break;
+					
+				case Relation.MOREDISJOINT:
+					if(!recordlist.hasNext())
+						insertRecord(record);
+					break;
+				
+				case Relation.LESSOVERLAP:
+					Record previousRecord = new Record(listrecord.range.lo, record.range.lo - 1, listrecord.statusCode, listrecord.transferCode);
+					insertRecord(previousRecord);
+					insertRecord(record);
+					deleteRecord(currentRecord);
+					break;
+				
+				case Relation.MOREOVERLAP:
+					Record nextRecord = new Record(record.range.hi + 1, listrecord.range.hi, listrecord.statusCode, listrecord.transferCode);
+					deleteRecord(currentRecord);
+					insertRecord(record);
+					insertRecord(nextRecord);
+					break;
+				
+			}
 		}
+			
 	}
 }
