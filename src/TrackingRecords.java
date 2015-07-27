@@ -1,9 +1,10 @@
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class TrackingRecords {
 	
-	ArrayList recordlist = new ArrayList();
+	List<Trackingcode> recordlist = new ArrayList<Trackingcode>();
 
 	public void insertRecord(Trackingcode newRecord)
 	{
@@ -25,8 +26,11 @@ public class TrackingRecords {
 		
 	}
 	
-	public void processRecordList()
+	public void insertingIntoRecordList()
 	{
-		
+		for(Trackingcode listrecord : recordlist)
+		{
+			
+		}
 	}
 }
