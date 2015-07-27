@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class TrackingRecords {
@@ -50,16 +51,53 @@ public class TrackingRecords {
 		{
 			if(!listrecord.invalid)
 			{
-				System.out.println(" "+listrecord.range.hi+" - "+listrecord.range.lo+" "+listrecord.statusCode+" "+listrecord.treansferCode);
+				System.out.println(" "+listrecord.range.hi+" - "+listrecord.range.lo+" "+listrecord.statusCode+" "+listrecord.transferCode);
 			}
 		}
 	}
 	
-	public void insertingIntoRecordList()
+	public void insertingIntoRecordList(Trackingcode newRecord)
 	{
 		for(Trackingcode listrecord : recordlist)
 		{
 			
 		}
 	}
+	
+	public Trackingcode processInput(String recordinformation)
+	{
+		Trackingcode newRecord = null;
+		
+		String[] informationaboutrecord = recordinformation.split(" ");
+		newRecord.range.lo = Integer.parseInt(informationaboutrecord[0]);
+		newRecord.range.lo = Integer.parseInt(informationaboutrecord[1]);
+		newRecord.statusCode = informationaboutrecord[2];
+		newRecord.transferCode = Integer.parseInt(informationaboutrecord[3]);
+		
+		return newRecord;
+	}
+	
+	public void readInput()
+	{
+		Scanner input = new Scanner(System.in);
+		
+		String nameOfTestCase = null;
+		
+		while(!(nameOfTestCase= input.nextLine()).equals("END"))
+		{
+			
+			String information = null;
+		
+			while(!(information=input.nextLine()).equals("0"))
+			{
+			Trackingcode newRecord = processInput(information);
+			insertingIntoRecordList(newRecord);
+			}
+		
+			System.out.println(nameOfTestCase);
+			displayRecordList();
+			recordlist = new ArrayList<Trackingcode>();
+		}
+	}
+	
 }

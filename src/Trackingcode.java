@@ -1,7 +1,7 @@
 
 public class Trackingcode {
 	String statusCode;
-	String treansferCode;
+	int transferCode;
 	Range range;
 	boolean invalid;
 	
