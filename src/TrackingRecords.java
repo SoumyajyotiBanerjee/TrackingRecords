@@ -24,4 +24,9 @@ public class TrackingRecords {
 	{
 		
 	}
+	
+	public void processRecordList()
+	{
+		
+	}
 }
