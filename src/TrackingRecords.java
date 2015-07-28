@@ -92,7 +92,7 @@ public class TrackingRecords {
 					insertRecord(previousRecord);
 					insertRecord(nextRecord);
 					insertRecord(record);
-					deleteRecord(currentRecord);
+					deleteRecord(listrecord);
 					break;
 							
 				case "LESSDISJOINT":
@@ -108,12 +108,12 @@ public class TrackingRecords {
 					Record previousRecord = new Record(listrecord.range.lo, record.range.lo - 1, listrecord.statusCode, listrecord.transferCode);
 					insertRecord(previousRecord);
 					insertRecord(record);
-					deleteRecord(currentRecord);
+					deleteRecord(listrecord);
 					break;
 				
 				case "MOREOVERLAP":
 					Record nextRecord = new Record(record.range.hi + 1, listrecord.range.hi, listrecord.statusCode, listrecord.transferCode);
-					deleteRecord(currentRecord);
+					deleteRecord(listrecord);
 					insertRecord(record);
 					insertRecord(nextRecord);
 					break;

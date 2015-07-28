@@ -3,6 +3,12 @@ public class Range {
     protected int lo;
     protected int hi;
 
+	Range(int lo, int hi)
+	{
+		this.lo = lo;
+		this.hi = hi;
+	}
+	
     public boolean contains(int x) {
         return this.lo <= x && x <= this.hi;
     }
