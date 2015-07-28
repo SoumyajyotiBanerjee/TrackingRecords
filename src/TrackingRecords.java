@@ -24,6 +24,20 @@ public class TrackingRecords {
 		recordlist.add(newRecord);
 	}
 	
+	public void deleteRecord(Trackingcode record)
+	{
+		int i=0;
+		
+		for(Trackingcode listrecord : recordlist)
+		{
+			if(record == listrecord)
+			{
+				recordlist.remove(i);
+				break;
+			}
+			i++;
+		}
+	}
 	public void splitRecordList(Trackingcode part1, Trackingcode part2)
 	{
 		
@@ -56,50 +70,48 @@ public class TrackingRecords {
 		}
 	}
 	
-<<<<<<< HEAD
-	public void insertingIntoRecordList(Trackingcode newRecord)
-=======
-	public void insertingIntoRecordList(Record record)
->>>>>>> 464968acadb3d4167f37ec05dd3baab442d2823b
+
+	public void insertingIntoRecordList(Trackingcode record)
+
 	{
 		
 		for(Trackingcode listrecord : recordlist)
 		{
-			Relation relation = listrecord.range.classify(record.range);
-			switch(relation)
+			String decision = listrecord.range.classify(record.range);
+			switch(decision)
 			{
-				case Relation.SAME:
+				case "SAME":
 					listrecord.transferCode = record.transferCode;
 					listrecord.statusCode = record.statusCode;
 					break;
 					
-				case Relation.SUPERSET:
+				case "SUPERSET":
 					
-					Record previousRecord = new Record(listrecord.range.lo, record.range.lo - 1, listrecord.statusCode, listrecord.transferCode);
-					Record nextRecord = new Record(record.range.hi + 1, listrecord.range.hi, listrecord.statusCode, listrecord.transferCode);
+					Trackingcode previousRecord = new Trackingcode(listrecord.range.lo, record.range.lo - 1, listrecord.statusCode, listrecord.transferCode);
+					Trackingcode nextRecord = new Trackingcode(record.range.hi + 1, listrecord.range.hi, listrecord.statusCode, listrecord.transferCode);
 					insertRecord(previousRecord);
 					insertRecord(nextRecord);
 					insertRecord(record);
 					deleteRecord(currentRecord);
 					break;
 							
-				case Relation.LESSDISJOINT:
+				case "LESSDISJOINT":
 					insertRecord(record);
 					break;
 					
-				case Relation.MOREDISJOINT:
+				case "MOREDISJOINT":
 					if(!recordlist.hasNext())
 						insertRecord(record);
 					break;
 				
-				case Relation.LESSOVERLAP:
+				case "LESSOVERLAP":
 					Record previousRecord = new Record(listrecord.range.lo, record.range.lo - 1, listrecord.statusCode, listrecord.transferCode);
 					insertRecord(previousRecord);
 					insertRecord(record);
 					deleteRecord(currentRecord);
 					break;
 				
-				case Relation.MOREOVERLAP:
+				case "MOREOVERLAP":
 					Record nextRecord = new Record(record.range.hi + 1, listrecord.range.hi, listrecord.statusCode, listrecord.transferCode);
 					deleteRecord(currentRecord);
 					insertRecord(record);
