@@ -55,9 +55,29 @@ public class TrackingRecords {
 		}
 	}
 	
-	public void mergeRecordList(Trackingcode part1, Trackingcode part2)
-	{
-		
+	public void removeElements(int start, int end) {
+		for (int i = start; i < end; i++) {
+			recordlist.remove(i);
+		}
+	}
+
+	public void mergeRecords() {
+		int j = 0;
+		Trackingcode next;
+		Trackingcode current;
+		for ( int i = 0; i < recordlist.size(); i++ ) {
+			j = i + 1;
+			current = recordlist.get(i);
+			next = recordlist.get(j);
+			while ( (current.statusCode.equals(next.statusCode) ) && (current.transferCode == next.transferCode) ) {
+				current.range.hi = next.range.hi;
+				next.invalid = true;
+				j++;
+				next = recordlist.get(j);
+			}
+			removeElements(i, j);
+		}
+
 	}
 	public void displayRecordList()
 	{
