@@ -63,10 +63,10 @@ public class TrackingRecords {
 	{
 		for(Trackingcode listrecord : recordlist)
 		{
-			//if(!listrecord.invalid)
-			// {
+			if(!listrecord.invalid)
+			{
 				System.out.println(" "+listrecord.range.hi+" - "+listrecord.range.lo+" -- "+listrecord.statusCode+" -- "+listrecord.transferCode);
-			// }
+			}
 		}
 	}
 	
@@ -75,15 +75,34 @@ public class TrackingRecords {
 
 	{
 		Trackingcode previousRecord;
+		Trackingcode listrecord = null;
 		Trackingcode nextRecord;
 		if(recordlist.size()==0)
 		{
 			insertRecord(record);
 		}
-		for(Trackingcode listrecord : recordlist)
+		
+		int positiontoCompare=0;
+		boolean insertatEnd=true;
+		
+		for(Trackingcode list : recordlist)
+		{
+			listrecord = list;
+			if(record.range.lo>listrecord.range.lo || record.range.hi>listrecord.range.hi)
+			{
+				insertatEnd=false;
+				break;
+			}
+			
+		}
+		
+		if(insertatEnd)
+		{
+			insertRecord(record);
+		}
+		else
 		{
 			String decision = listrecord.range.classify(record.range);
-			System.out.println(decision);
 			switch(decision)
 			{
 				case "SAME":
@@ -95,10 +114,11 @@ public class TrackingRecords {
 					
 					previousRecord = new Trackingcode(listrecord.range.lo, record.range.lo - 1, listrecord.statusCode, listrecord.transferCode);
 					nextRecord = new Trackingcode(record.range.hi + 1, listrecord.range.hi, listrecord.statusCode, listrecord.transferCode);
+					deleteRecord(listrecord);
 					insertRecord(previousRecord);
 					insertRecord(nextRecord);
 					insertRecord(record);
-					deleteRecord(listrecord);
+					
 					break;
 							
 				case "LESSDISJOINT":
@@ -122,9 +142,10 @@ public class TrackingRecords {
 					insertRecord(record);
 					insertRecord(nextRecord);
 					break;
-				
 			}
 		}
+				
+			
 			
 	}
 	
