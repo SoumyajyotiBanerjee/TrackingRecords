@@ -63,10 +63,10 @@ public class TrackingRecords {
 	{
 		for(Trackingcode listrecord : recordlist)
 		{
-			if(!listrecord.invalid)
-			{
-				System.out.println(" "+listrecord.range.hi+" - "+listrecord.range.lo+" "+listrecord.statusCode+" "+listrecord.transferCode);
-			}
+			//if(!listrecord.invalid)
+			// {
+				System.out.println(" "+listrecord.range.hi+" - "+listrecord.range.lo+" -- "+listrecord.statusCode+" -- "+listrecord.transferCode);
+			// }
 		}
 	}
 	
@@ -74,10 +74,16 @@ public class TrackingRecords {
 	public void insertingIntoRecordList(Trackingcode record)
 
 	{
-		
+		Trackingcode previousRecord;
+		Trackingcode nextRecord;
+		if(recordlist.size()==0)
+		{
+			insertRecord(record);
+		}
 		for(Trackingcode listrecord : recordlist)
 		{
 			String decision = listrecord.range.classify(record.range);
+			System.out.println(decision);
 			switch(decision)
 			{
 				case "SAME":
@@ -87,8 +93,8 @@ public class TrackingRecords {
 					
 				case "SUPERSET":
 					
-					Trackingcode previousRecord = new Trackingcode(listrecord.range.lo, record.range.lo - 1, listrecord.statusCode, listrecord.transferCode);
-					Trackingcode nextRecord = new Trackingcode(record.range.hi + 1, listrecord.range.hi, listrecord.statusCode, listrecord.transferCode);
+					previousRecord = new Trackingcode(listrecord.range.lo, record.range.lo - 1, listrecord.statusCode, listrecord.transferCode);
+					nextRecord = new Trackingcode(record.range.hi + 1, listrecord.range.hi, listrecord.statusCode, listrecord.transferCode);
 					insertRecord(previousRecord);
 					insertRecord(nextRecord);
 					insertRecord(record);
@@ -100,19 +106,18 @@ public class TrackingRecords {
 					break;
 					
 				case "MOREDISJOINT":
-					if(!recordlist.hasNext())
-						insertRecord(record);
+					insertRecord(record);
 					break;
 				
 				case "LESSOVERLAP":
-					Record previousRecord = new Record(listrecord.range.lo, record.range.lo - 1, listrecord.statusCode, listrecord.transferCode);
+					previousRecord = new Trackingcode(listrecord.range.lo, record.range.lo - 1, listrecord.statusCode, listrecord.transferCode);
 					insertRecord(previousRecord);
 					insertRecord(record);
 					deleteRecord(listrecord);
 					break;
 				
 				case "MOREOVERLAP":
-					Record nextRecord = new Record(record.range.hi + 1, listrecord.range.hi, listrecord.statusCode, listrecord.transferCode);
+					nextRecord = new Trackingcode(record.range.hi + 1, listrecord.range.hi, listrecord.statusCode, listrecord.transferCode);
 					deleteRecord(listrecord);
 					insertRecord(record);
 					insertRecord(nextRecord);
@@ -125,13 +130,16 @@ public class TrackingRecords {
 	
 	public Trackingcode processInput(String recordinformation)
 	{
-		Trackingcode newRecord = null;
+		Trackingcode newRecord = new Trackingcode();
 		
 		String[] informationaboutrecord = recordinformation.split(" ");
-		newRecord.range.lo = Integer.parseInt(informationaboutrecord[0]);
-		newRecord.range.lo = Integer.parseInt(informationaboutrecord[1]);
+	
+		//System.out.println(informationaboutrecord[0].toString().trim()+"  "+informationaboutrecord[1]);
+		newRecord.range =  new Range(new Integer(informationaboutrecord[0]),new Integer(informationaboutrecord[1]));
+		//newRecord.range.hi = (new Integer(informationaboutrecord[1].toString().trim())).intValue();*/
 		newRecord.statusCode = informationaboutrecord[2];
 		newRecord.transferCode = Integer.parseInt(informationaboutrecord[3]);
+	
 		
 		return newRecord;
 	}
@@ -153,7 +161,7 @@ public class TrackingRecords {
 				insertingIntoRecordList(newRecord);
 			}
 		
-			System.out.println(nameOfTestCase);
+			System.out.println(nameOfTestCase+" OUTPUT >> ");
 			displayRecordList();
 			recordlist = new ArrayList<Trackingcode>();
 		}
