@@ -149,8 +149,8 @@ public class TrackingRecords {
 		
 			while(!(information=input.nextLine()).equals("0"))
 			{
-			Trackingcode newRecord = processInput(information);
-			insertingIntoRecordList(newRecord);
+				Trackingcode newRecord = processInput(information);
+				insertingIntoRecordList(newRecord);
 			}
 		
 			System.out.println(nameOfTestCase);
